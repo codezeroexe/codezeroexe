@@ -139,7 +139,8 @@ CW, LH, PAD, FS = 9.6, 18, 28, 14  # char width (widest common mono), line heigh
 COL = 46  # chars per info column
 
 
-def logo_svg(logo, x0, y0):
+def logo_svg(logo, x0, y0, k):
+    """k scales the logo font, so a high-res logo fits the card width."""
     out = []
     for y, row in enumerate(logo):  # one tspan per same-color run; blanks join the current run
         spans, cur, buf = [], None, ""
@@ -150,7 +151,7 @@ def logo_svg(logo, x0, y0):
                 buf = ""
             cur, buf = col, buf + ch
         spans.append(f'<tspan fill="{cur or FG}">{escape(buf.rstrip())}</tspan>')
-        out.append(f'<text x="{x0}" y="{y0 + y * LH}">{"".join(spans)}</text>')
+        out.append(f'<text x="{x0}" y="{y0 + y * LH * k:.1f}" font-size="{FS * k:.2f}">{"".join(spans)}</text>')
     return out
 
 
@@ -168,12 +169,13 @@ def info_svg(lines, x0, y0):
 
 
 def render(logo, left, right):
-    width = PAD * 2 + max(len(logo[0]), COL * 2 + 4) * CW
-    lx = PAD + (width - PAD * 2 - len(logo[0]) * CW) / 2  # center logo
+    width = PAD * 2 + (COL * 2 + 4) * CW
+    k = min(1, (COL * 2 + 4) / len(logo[0]))
+    lx = PAD + (width - PAD * 2 - len(logo[0]) * CW * k) / 2  # center logo
     out = [f'<text x="{PAD}" y="{PAD + FS}" fill="{DIM}">{escape("$ fastfetch --logo hari.png")}</text>']
     top = PAD + FS + LH * 2
-    out += logo_svg(logo, lx, top)
-    y = top + (len(logo) + 2) * LH
+    out += logo_svg(logo, lx, top, k)
+    y = top + len(logo) * LH * k + LH * 2
     out += info_svg(left, PAD, y)
     out += info_svg(right, PAD + (COL + 4) * CW, y)
     y += (max(len(left), len(right)) + 1) * LH
