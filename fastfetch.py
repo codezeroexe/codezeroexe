@@ -104,11 +104,11 @@ def columns(u):
         ("Terminal", "Ghostty"),
         ("Agents", "Claude Code, Pi, OpenCode, Goose"),
         ("CPU", "Brain (1 core) @ 3am boost"),
-        ("GPU", "Apple M4 + Claude + Figma, caffeine-cooled"),
+        ("GPU", "Apple M4 + Claude + Figma, overclocked"),
         ("Memory", f"{u['repositories']['totalCount']} repos, 2 brain cells"),
         ("Packages", "Swift, Kotlin, Python, Java"),
         ("Displays", "Android, macOS, Windows, Web"),
-        ("Battery", "Don Toliver (charging)"),
+        ("Battery", "3% (espresso on the way)"),
         ("Network", "srhxri.runs-on.dev"),
     ]
     right = [
